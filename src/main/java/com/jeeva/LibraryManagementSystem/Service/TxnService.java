@@ -2,6 +2,7 @@ package com.jeeva.LibraryManagementSystem.Service;
 
 import com.jeeva.LibraryManagementSystem.exception.TxnException;
 import com.jeeva.LibraryManagementSystem.model.*;
+import com.jeeva.LibraryManagementSystem.repository.RedisDataRepository;
 import com.jeeva.LibraryManagementSystem.repository.TxnRepository;
 import com.jeeva.LibraryManagementSystem.request.TxnCreateRequest;
 import com.jeeva.LibraryManagementSystem.request.TxnReturnRequest;
@@ -20,6 +21,9 @@ public class TxnService {
 
     @Autowired
     private TxnRepository txnRepository;
+
+    @Autowired
+    private RedisDataRepository redisDataRepository;
 
     @Autowired
     private BookService bookService;
@@ -72,9 +76,9 @@ public class TxnService {
     }
 
     @Transactional(rollbackFor = {TxnException.class})
-    public String createTxn(TxnCreateRequest txnCreateRequest) throws TxnException {
+    public String createTxn(TxnCreateRequest txnCreateRequest, Student student) throws TxnException {
 
-        Student studentFromLib = filterStudent(StudentFilter.EMAIL, Operator.EQUALS, txnCreateRequest.getStudentContact());
+        Student studentFromLib = filterStudent(StudentFilter.EMAIL, Operator.EQUALS, student.getEmail());
 
 
         Book bookFromLib =  filterBook(FilterType.BOOK_NO, Operator.EQUALS, txnCreateRequest.getBookNo());
@@ -94,6 +98,10 @@ public class TxnService {
         txn = txnRepository.save(txn);
         bookFromLib.setStudent(studentFromLib);
         bookService.saveUpdate(bookFromLib);
+
+        // push the data into redis
+        redisDataRepository.setBookToRedis(bookFromLib);
+
         return txn.getTxnId();
     }
 
@@ -123,6 +131,10 @@ public class TxnService {
 
             bookFromLib.setStudent(null);
             bookService.saveUpdate(bookFromLib);
+
+            // push the data into redis
+            redisDataRepository.setBookToRedis(bookFromLib);
+
             txnRepository.save(txnFromDB);
 
             return amount;

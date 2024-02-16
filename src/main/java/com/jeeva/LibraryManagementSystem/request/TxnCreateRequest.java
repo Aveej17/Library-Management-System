@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class TxnCreateRequest {
 
-    private String studentContact;
+
     private String bookNo;
     private Integer amount;
 }
