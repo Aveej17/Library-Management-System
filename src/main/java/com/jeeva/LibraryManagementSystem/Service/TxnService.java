@@ -103,7 +103,7 @@ public class TxnService {
         Student studentFromDB = filterStudent(StudentFilter.EMAIL, Operator.EQUALS, txnReturnRequest.getStudentContact());
         Book bookFromLib = filterBook(FilterType.BOOK_NO, Operator.EQUALS, txnReturnRequest.getBookNo());
 
-        if(bookFromLib.getStudent() != null && bookFromLib.getStudent().equals(studentFromDB)){
+        if(bookFromLib.getStudent() != null && bookFromLib.getStudent().getEmail().equals(studentFromDB.getEmail())){
             Txn txnFromDB = txnRepository.findByTxnId(txnReturnRequest.getTxnId());
 
             if(txnFromDB == null){
