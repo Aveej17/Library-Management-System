@@ -1,4 +1,5 @@
 package com.jeeva.LibraryManagementSystem.request;
+
 import com.jeeva.LibraryManagementSystem.model.Student;
 import com.jeeva.LibraryManagementSystem.model.StudentType;
 import jakarta.validation.constraints.NotBlank;
@@ -13,11 +14,15 @@ import lombok.*;
 public class StudentCreateRequest {
     @NotBlank
     private String name;
-    @NotBlank
+    @NotBlank(message = "Email Cannot be null")
     private String email;
     @NotBlank
     private String phoneNo;
     private String address;
+
+    private String password;
+
+    private String authority;
 
     public Student toStudent() {
         return Student.builder().
@@ -25,6 +30,8 @@ public class StudentCreateRequest {
                 email(this.email).
                 phoneNo(this.phoneNo).
                 address(this.address).
+                password(this.password).
+                authority(this.authority).
                 status(StudentType.ACTIVE).
                 build();
     }

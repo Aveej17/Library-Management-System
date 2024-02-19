@@ -34,7 +34,8 @@ import static org.mockito.Mockito.when;
 public class TxnServiceTest {
 
     @InjectMocks
-    private TxnService txnService;
+    private TxnService txnService;   // Injecting the following Mock data into txn service in order to test that's why
+    // i am using InjectMocks
 
     @Mock
     private TxnRepository txnRepository;

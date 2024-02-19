@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
+
+    @ExceptionHandler(value = StudentCreationException.class)
+    public ResponseEntity<Object> handle(StudentCreationException studentCreationException){
+        return new ResponseEntity<>(studentCreationException.getMessage(), HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(value = TxnException.class)
     public ResponseEntity<Object> handle(TxnException txnException){
         return new ResponseEntity<>(txnException.getMessage(), HttpStatus.BAD_REQUEST);

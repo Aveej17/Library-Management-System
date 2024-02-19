@@ -31,7 +31,7 @@ public class BookService {
     private RedisDataRepository redisDataRepository;
 
 
-    public Book createBook(BookCreateRequest bookCreateRequest) {
+    public Book createBook(BookCreateRequest bookCreateRequest) throws Exception {
         // check if either, which is coming to me from fe is already present in my db or not
         // if not present, add author into db
 
@@ -42,6 +42,12 @@ public class BookService {
             authorFromDb = authorRepository.save(bookCreateRequest.toAuthor());
 
         }
+        //Check bookNo is same or not
+        List<Book> books = bookRepository.findByBookNo(bookCreateRequest.getBookNo());
+        if(!books.isEmpty() && books.get(0) != null){
+            throw new Exception("Book no is already assigned to another Book");
+        }
+
         // create a row inside my book
         Book book = bookCreateRequest.toBook();
         book.setAuthor(authorFromDb);
@@ -49,8 +55,6 @@ public class BookService {
 
         // push the data into redis
         redisDataRepository.setBookToRedis(book);
-
-
         return book;
     }
 

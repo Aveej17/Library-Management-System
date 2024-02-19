@@ -10,7 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class TxnReturnRequest {
-    private String studentContact;
+//    private String studentContact;
+    private String email;
     private String bookNo;
     private String txnId;
 

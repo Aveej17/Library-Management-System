@@ -17,6 +17,8 @@ public class BookCreateRequest {
 
     @NotBlank(message = "Book name must not be blank")
     private String bookName;
+
+    @NotBlank(message = "Book name must not be blank")
     private String bookNo;
     @Positive(message = "Deposit amount should be greater than 0")
     private int cost;
