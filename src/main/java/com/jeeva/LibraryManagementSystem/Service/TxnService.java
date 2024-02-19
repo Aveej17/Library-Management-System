@@ -108,10 +108,10 @@ public class TxnService {
 
     @Transactional(rollbackFor = {TxnException.class})
     public int returnBook(TxnReturnRequest txnReturnRequest) throws TxnException {
-        Student studentFromDB = filterStudent(StudentFilter.EMAIL, Operator.EQUALS, txnReturnRequest.getStudentContact());
+        Student studentFromDB = filterStudent(StudentFilter.EMAIL, Operator.EQUALS, txnReturnRequest.getEmail());
         Book bookFromLib = filterBook(FilterType.BOOK_NO, Operator.EQUALS, txnReturnRequest.getBookNo());
 
-        if(bookFromLib.getStudent() != null && bookFromLib.getStudent().equals(studentFromDB)){
+        if(bookFromLib.getStudent() != null && bookFromLib.getStudent().getEmail().equals(studentFromDB.getEmail())){
             Txn txnFromDB = txnRepository.findByTxnId(txnReturnRequest.getTxnId());
 
             if(txnFromDB == null){

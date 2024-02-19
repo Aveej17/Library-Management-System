@@ -14,7 +14,7 @@ import lombok.*;
 public class StudentCreateRequest {
     @NotBlank
     private String name;
-    @NotBlank
+    @NotBlank(message = "Email Cannot be null")
     private String email;
     @NotBlank
     private String phoneNo;

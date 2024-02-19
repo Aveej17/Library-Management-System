@@ -3,6 +3,7 @@ package com.jeeva.LibraryManagementSystem.Controller;
 
 import com.jeeva.LibraryManagementSystem.Service.StudentService;
 import com.jeeva.LibraryManagementSystem.exception.ParameterMissingException;
+import com.jeeva.LibraryManagementSystem.exception.StudentCreationException;
 import com.jeeva.LibraryManagementSystem.model.Operator;
 import com.jeeva.LibraryManagementSystem.model.Student;
 import com.jeeva.LibraryManagementSystem.model.StudentFilter;
@@ -22,7 +23,7 @@ public class StudentController {
 
 
     @PostMapping("/create")
-    public Student createStudent(@RequestBody  @Valid StudentCreateRequest studentCreateRequest) throws ParameterMissingException {
+    public Student createStudent(@RequestBody  @Valid StudentCreateRequest studentCreateRequest) throws ParameterMissingException, StudentCreationException {
 
         if(studentCreateRequest.getEmail() == null || StringUtils.isEmpty(studentCreateRequest.getEmail())){
             throw new ParameterMissingException("Student email cannot be null");

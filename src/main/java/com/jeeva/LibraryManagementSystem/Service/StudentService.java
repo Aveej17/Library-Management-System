@@ -1,6 +1,7 @@
 package com.jeeva.LibraryManagementSystem.Service;
 
 
+import com.jeeva.LibraryManagementSystem.exception.StudentCreationException;
 import com.jeeva.LibraryManagementSystem.model.Operator;
 import com.jeeva.LibraryManagementSystem.model.Student;
 import com.jeeva.LibraryManagementSystem.model.StudentFilter;
@@ -23,16 +24,15 @@ public class StudentService implements UserDetailsService {
     @Value("${student.authority}")
     private String studentAuthority;
 
-    public Student createStudent(StudentCreateRequest studentCreateRequest) {
+    public Student createStudent(StudentCreateRequest studentCreateRequest) throws StudentCreationException {
         List<Student> studentList = studentRepository.findByPhoneNo(studentCreateRequest.getPhoneNo());
-        Student studentFromDB = null;
+        Student studentFromDB;
         if(studentList == null || studentList.isEmpty()){
             studentCreateRequest.setAuthority(studentAuthority);
             studentFromDB = studentRepository.save(studentCreateRequest.toStudent());
             return studentFromDB;
         }
-        studentFromDB = studentList.get(0);
-        return studentFromDB;
+        throw new StudentCreationException("Email or Phone No should be unique");
     }
 
 
